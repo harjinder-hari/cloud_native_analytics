@@ -26,9 +26,17 @@ global movie_reco_model
 
 @app.before_first_request
 def load_model():
-    model_data_store = S3DataStore(src_bucket_name=config.AWS_BUCKET,
-                                   access_key=config.AWS_ACCESS_KEY_ID,
-                                   secret_key=config.AWS_SECRET_ACCESS_KEY)
+    print "Loading model ..."
+    bucket_name = config.AWS_BUCKET
+    access_key_id = config.AWS_ACCESS_KEY_ID
+    secret_access_key = config.AWS_SECRET_ACCESS_KEY
+    print "Read the config values ..."
+    print "------------"
+    print access_key_id
+    print "------------"
+    model_data_store = S3DataStore(src_bucket_name=bucket_name.strip(),
+                                   access_key=access_key_id.strip(),
+                                   secret_key=secret_access_key.strip())
     assert (model_data_store is not None)
 
     app.movie_reco_model = MovieRecommender.load_from_data_store(data_store=model_data_store)
