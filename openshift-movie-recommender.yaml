@@ -105,7 +105,7 @@ items:
         ref: master
         uri: git@github.com:harjinder-hari/cloud_native_analytics.git
       sourceSecret:
-        name: "kattappasecret"
+        name: "gitkey"
       type: Git
     strategy:
       dockerStrategy:
