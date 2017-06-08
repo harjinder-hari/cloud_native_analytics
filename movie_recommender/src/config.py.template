@@ -1,0 +1,19 @@
+import os
+
+TESTING = False
+DEBUG = True
+LOCAL_RUN = True
+
+LOGFILE_PATH = os.environ.get("LOGFILE_PATH", "/tmp/error.log")
+SERVICE_PORT = os.environ.get("SERVICE_PORT", "")
+
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+AWS_BUCKET = os.environ.get("AWS_BUCKET", "movie-reco-model")
+
+DEPLOYMENT_PREFIX = os.environ.get("DEPLOYMENT_PREFIX", "")
+
+LOCAL_SPARK_HOME = "/Users/hmistry/Spark/spark-2.0.2-bin-hadoop2.7"
+
+TRAINING_DATA = "/Users/hmistry/work/coding_for_cloud/src/cloud_native_analytics/movie_recommender/test/data/sample_movielens_ratings.txt"
+MODEL_URL = "/tmp/model"

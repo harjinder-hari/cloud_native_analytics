@@ -1,0 +1,36 @@
+FROM centos:7
+MAINTAINER Harjindersingh Mistry <harjinder.v2@gmail.com>
+
+RUN yum install -y epel-release && \
+    yum install -y python-pip python-devel gcc && \
+    yum install -y zip && \
+    yum install -y wget && \
+    wget https://d3kbcqa49mib13.cloudfront.net/spark-2.0.2-bin-hadoop2.7.tgz && \
+    tar -xvzf /spark-2.0.2-bin-hadoop2.7.tgz && \
+    yum install -y gcc-c++.x86_64 && \
+    yum clean all
+
+
+# --------------------------------------------------------------------------------------------------
+# install python packages
+# --------------------------------------------------------------------------------------------------
+COPY ./movie_recommender/requirements.txt /
+RUN pip install -r /requirements.txt && rm /requirements.txt
+
+
+# --------------------------------------------------------------------------------------------------
+# copy src code and scripts into root dir /
+# the scoring_service.py code assumes this dir structure
+# --------------------------------------------------------------------------------------------------
+COPY ./movie_recommender/src/scoring_service.py /scoring_service.py
+COPY ./movie_recommender /movie_recommender
+COPY ./util /util
+COPY ./movie_recommender/src/config.py.template /movie_recommender/src/config.py
+
+
+# --------------------------------------------------------------------------------------------------
+# add entrypoint for the container
+# --------------------------------------------------------------------------------------------------
+ADD ./movie_recommender/scripts/entrypoint.sh /bin/entrypoint.sh
+
+ENTRYPOINT ["/bin/entrypoint.sh"]
