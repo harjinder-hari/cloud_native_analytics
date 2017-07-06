@@ -26,14 +26,9 @@ global movie_reco_model
 
 @app.before_first_request
 def load_model():
-    print "Loading model ..."
     bucket_name = config.AWS_BUCKET
     access_key_id = config.AWS_ACCESS_KEY_ID
     secret_access_key = config.AWS_SECRET_ACCESS_KEY
-    print "Read the config values ..."
-    print "------------"
-    print access_key_id
-    print "------------"
     model_data_store = S3DataStore(src_bucket_name=bucket_name.strip(),
                                    access_key=access_key_id.strip(),
                                    secret_key=secret_access_key.strip())

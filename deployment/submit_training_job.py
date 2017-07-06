@@ -12,10 +12,10 @@
 import sys
 import boto3
 from time import gmtime, strftime
-from analytics_platform.janus.src import config
+from movie_recommender.src import config
 
 
-COMPONENT_PREFIX = "janus"
+COMPONENT_PREFIX = "cloud-native"
 
 
 def submit_job(input_bootstrap_file, input_src_code_file):

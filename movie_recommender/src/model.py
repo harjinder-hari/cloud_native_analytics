@@ -26,19 +26,18 @@ class MovieRecommender:
         self.dict_user = None
         self.dict_prod = None
 
-
     @classmethod
     def train(cls, src_url):
         """
         Train a matrix factorization model for movie recommendations.
+
+        :param src_url: URL of source data for training the model
+        :return: MovieRecommender object.
         """
         if config.LOCAL_RUN:
             os.environ["SPARK_HOME"] = config.LOCAL_SPARK_HOME  # Needed only when running local spark
 
         # Initialize spark context
-        # conf = SparkConf().setAppName("Frequent Itemset Analysis")
-        # sc = SparkContext(conf=conf)
-        # sqlContext = SQLContext(sc)
         spark = SparkSession.builder.getOrCreate()
 
         lines = spark.read.text(src_url).rdd
@@ -53,13 +52,6 @@ class MovieRecommender:
         model = als.fit(training)
         tmp_url = "/tmp/als"
         model.write().overwrite().save(tmp_url)
-
-        # Evaluate the model by computing the RMSE on the test data
-        # predictions = model.transform(test)
-        # evaluator = RegressionEvaluator(metricName="rmse", labelCol="rating",
-        #                                 predictionCol="prediction")
-        # rmse = evaluator.evaluate(predictions)
-        # print("Root-mean-square error = " + str(rmse))
 
         # Read the ALS model and extract user and product features
         user_path = join(tmp_url, "userFactors")
@@ -82,6 +74,7 @@ class MovieRecommender:
         Save the given movie recommendation model.
 
         :param target_url: URL where to save the movie recommendation model.
+        :return: None
         """
         pickle.dump(self.dict_user, open(target_url + "/user.pkl", "wb"))
         pickle.dump(self.dict_prod, open(target_url + "/prod.pkl", "wb"))
@@ -91,6 +84,7 @@ class MovieRecommender:
         Save the given movie recommendation model.
 
         :param data_store: Data store to save the model.
+        :return: None
         """
         user_pkl = "/tmp/dump_user.pkl"
         prod_pkl = "/tmp/dump_prod.pkl"
@@ -109,6 +103,7 @@ class MovieRecommender:
         Load the movie recommendation model.
 
         :param src_url: URL from where to load a movie recommendation model.
+        :return: MovieRecommende object.
         """
         movie_reco = MovieRecommender()
         movie_reco.dict_user = pickle.load(open(src_url + "/user.pkl", "rb"))
@@ -122,6 +117,7 @@ class MovieRecommender:
         Load the movie recommendation model.
 
         :param data_store: Data store to read the model.
+        :return: MovieRecommender object.
         """
         user_pkl = "/tmp/dump_user.pkl"
         prod_pkl = "/tmp/dump_prod.pkl"
@@ -136,6 +132,13 @@ class MovieRecommender:
         return movie_reco
 
     def recommend_movies(self, user_id, max_reco=10):
+        """
+        Recommend movies for the given user-id.
+
+        :param user_id: User for whom recommendations will be generated.
+        :param max_reco: Max number of recommendations.
+        :return: Dictionary of recommendations with corresponding confidence.
+        """
         pd_user_df = pd.DataFrame.from_dict(self.dict_user)
         pd_prod_df = pd.DataFrame.from_dict(self.dict_prod)
 
