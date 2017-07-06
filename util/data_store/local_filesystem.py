@@ -55,12 +55,26 @@ class LocalFileSystem(AbstractDataStore):
 
     def upload_file(self, src, target):
         """Upload file into data store"""
-        # self.bucket.upload_file(src, target)
+        with open(os.path.join(self.src_dir, src), 'rb') as f1:
+            with open(target, 'wb') as f2:
+                while True:
+                    buf = f1.read(1024)
+                    if buf:
+                        f2.write(buf)
+                    else:
+                        break
         return None
 
     def download_file(self, src, target):
         """Download file from data store"""
-        # self.bucket.download_file(src, target)
+        with open(os.path.join(self.src_dir, src), 'rb') as f1:
+            with open(target, 'wb') as f2:
+                while True:
+                    buf = f1.read(1024)
+                    if buf:
+                        f2.write(buf)
+                    else:
+                        break
         return None
 
     # def read_bif_file(self, filename):

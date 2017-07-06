@@ -8,12 +8,5 @@ services:
     network_mode: bridge
     entrypoint:
       - /bin/entrypoint.sh
-    environment:
-      AWS_ACCESS_KEY_ID: ""
-      AWS_SECRET_ACCESS_KEY: ""
-      AWS_BUCKET: "movie-reco-model"
-      DEPLOYMENT_PREFIX: "DEV"
-      SERVICE_PORT: "5001"
-      SERVICE_TIMEOUT: "900"
     ports:
       - "5001:5001"

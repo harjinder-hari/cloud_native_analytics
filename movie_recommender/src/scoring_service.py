@@ -10,7 +10,7 @@ from movie_recommender.src import config
 
 
 # Python2.x: Make default encoding as UTF-8
-from util.data_store.s3_data_store import S3DataStore
+from util.data_store.local_filesystem import LocalFileSystem
 
 if sys.version_info.major == 2:
     reload(sys)
@@ -26,12 +26,7 @@ global movie_reco_model
 
 @app.before_first_request
 def load_model():
-    bucket_name = config.AWS_BUCKET
-    access_key_id = config.AWS_ACCESS_KEY_ID
-    secret_access_key = config.AWS_SECRET_ACCESS_KEY
-    model_data_store = S3DataStore(src_bucket_name=bucket_name.strip(),
-                                   access_key=access_key_id.strip(),
-                                   secret_key=secret_access_key.strip())
+    model_data_store = LocalFileSystem(src_dir="/movie_recommender/data")
     assert (model_data_store is not None)
 
     app.movie_reco_model = MovieRecommender.load_from_data_store(data_store=model_data_store)

@@ -86,8 +86,8 @@ class MovieRecommender:
         :param data_store: Data store to save the model.
         :return: None
         """
-        user_pkl = "/tmp/dump_user.pkl"
-        prod_pkl = "/tmp/dump_prod.pkl"
+        user_pkl = "/tmp/user.pkl"
+        prod_pkl = "/tmp/prod.pkl"
 
         pickle.dump(self.dict_user, open(user_pkl, "wb"))
         pickle.dump(self.dict_prod, open(prod_pkl, "wb"))
@@ -119,8 +119,8 @@ class MovieRecommender:
         :param data_store: Data store to read the model.
         :return: MovieRecommender object.
         """
-        user_pkl = "/tmp/dump_user.pkl"
-        prod_pkl = "/tmp/dump_prod.pkl"
+        user_pkl = "/tmp/user.pkl"
+        prod_pkl = "/tmp/prod.pkl"
 
         data_store.download_file('user.pkl', user_pkl)
         data_store.download_file('prod.pkl', prod_pkl)
